@@ -12,7 +12,7 @@ migrate = Migrate(app, db)
 
 class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True)
+    username = db.Column(db.String(64), index=True, unique=False)
     content = db.Column(db.String(140), index=True)
     def __repr__(self):
         return '<User %r>' % self.username
@@ -23,11 +23,7 @@ def index():
     contents = Content.query.all()
     return render_template('index.html', contents=contents)
 
-@app.route('/form')
-def form():
-    return render_template('form.html')
-
-@app.route('/post', methods=['POST'])
+@app.route('/', methods=['POST'])
 def post():
     if request.form['username'] and  request.form['content']:
         newContent = Content(username=request.form['username'], content=request.form['content'])
