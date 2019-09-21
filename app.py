@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -26,10 +26,11 @@ def index():
 @app.route('/', methods=['POST'])
 def post():
     if request.form['username'] and  request.form['content']:
-        newContent = Content(usernames=request.form['username'], content=request.form['content'])
+        newContent = Content(usernames=request.form['username'],
+         content=request.form['content'])
         db.session.add(newContent)
         db.session.commit()
-        return render_template('result.html', username=request.form['username'], content=request.form['content'])   
+        return redirect('/')   
     else:
         return render_template('error.html')
 
